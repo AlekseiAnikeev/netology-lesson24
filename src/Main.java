@@ -1,21 +1,17 @@
+import java.io.File;
 import java.util.Scanner;
 
 /**
  * @author Aleksey Anikeev aka AgentChe
- * Date of creation: 22.06.2022
+ * Date of creation: 08.09.2022
  */
 public class Main {
+    public static final String BASKET_FILE = "basket.txt";
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        String[] products = {"Черешня", "Яблоки", "Персики"};
-        int[] prices = {350, 99, 170};
-
-        Basket basket = new Basket(prices, products);
-
-
-        int[] productCountList = new int[products.length];
-        boolean[] isSelected = new boolean[products.length];
-        int sumProducts = 0;
+        String[] products = {"Черешня", "Яблоки", "Персики", "Хрен"};
+        int[] prices = {350, 99, 170, 100};
+        Basket basket = initializationBasket(products, prices);
         while (true) {
             int numberOfProduct;
             int productCount;
@@ -35,16 +31,19 @@ public class Main {
                 System.out.println("Не корректный ввод");
                 continue;
             }
-            productCountList[numberOfProduct - 1] += productCount;
-            sumProducts += prices[numberOfProduct - 1] * productCount;
-            isSelected[numberOfProduct - 1] = true;
+            basket.addToCart(numberOfProduct - 1, productCount);
         }
-        System.out.println("Ваша корзина:");
-        for (int i = 0; i < products.length; i++) {
-            if (isSelected[i]) {
-                System.out.printf("%s %d шт %d руб/шт %d руб в сумме\n", products[i], productCountList[i], prices[i], prices[i] * productCountList[i]);
-            }
+        basket.printCart();
+    }
+
+    private static Basket initializationBasket(String[] products, int[] prices) {
+        File file = new File(BASKET_FILE);
+        Basket basket;
+        if (file.exists()) {
+            basket = Basket.loadFromTxtFile(file);
+        } else {
+            basket = new Basket(prices, products);
         }
-        System.out.printf("Итого %d руб\n", sumProducts);
+        return basket;
     }
 }
