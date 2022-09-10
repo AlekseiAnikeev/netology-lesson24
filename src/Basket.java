@@ -11,6 +11,7 @@ public class Basket {
     private final int[] prices;
     private final String[] products;
     private final Map<String, Integer> shoppingList = new HashMap<>();
+    private int sumProducts;
 
 
     Basket(int[] prices, String[] products) {
@@ -30,12 +31,14 @@ public class Basket {
 
     public void printCart() {
         for (Map.Entry<String, Integer> entry : shoppingList.entrySet()) {
+            sumProducts += prices[Arrays.asList(products).indexOf(entry.getKey())] * entry.getValue();
             System.out.printf("%s %d шт %d руб/шт %d руб в сумме\n"
                     , entry.getKey()
                     , entry.getValue()
                     , prices[Arrays.asList(products).indexOf(entry.getKey())]
                     , prices[Arrays.asList(products).indexOf(entry.getKey())] * entry.getValue());
         }
+        System.out.printf("Итого %d руб\n", sumProducts);
     }
 
     public void saveTxt(File textFile) {
