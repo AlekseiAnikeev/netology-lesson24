@@ -6,7 +6,7 @@ import java.util.Scanner;
  * Date of creation: 08.09.2022
  */
 public class Main {
-    public static final String BASKET_FILE = "basket.txt";
+    public static final String BASKET_FILE = "basket.bin";
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         String[] products = {"Черешня", "Яблоки", "Персики", "Хрен"};
@@ -40,7 +40,7 @@ public class Main {
         File file = new File(BASKET_FILE);
         Basket basket;
         if (file.exists()) {
-            basket = Basket.loadFromTxtFile(file);
+            basket = Basket.loadFromBinFile(file);
         } else {
             basket = new Basket(prices, products);
         }
