@@ -10,7 +10,7 @@ import java.util.Map;
 public class Basket {
     private final int[] prices;
     private final String[] products;
-    private final Map<String, Integer> list = new HashMap<>();
+    private final Map<String, Integer> shoppingList = new HashMap<>();
 
 
     Basket(int[] prices, String[] products) {
@@ -19,17 +19,17 @@ public class Basket {
     }
 
     public void addToCart(int productNum, int amount) {
-        if (list.containsKey(products[productNum])) {
-            Integer counter = list.get(products[productNum]);
-            list.put(products[productNum], counter + amount);
+        if (shoppingList.containsKey(products[productNum])) {
+            Integer counter = shoppingList.get(products[productNum]);
+            shoppingList.put(products[productNum], counter + amount);
         } else {
-            list.put(products[productNum], amount);
+            shoppingList.put(products[productNum], amount);
         }
         saveTxt(new File(Main.BASKET_FILE));
     }
 
     public void printCart() {
-        for (Map.Entry<String, Integer> entry : list.entrySet()) {
+        for (Map.Entry<String, Integer> entry : shoppingList.entrySet()) {
             System.out.printf("%s %d шт %d руб/шт %d руб в сумме\n"
                     , entry.getKey()
                     , entry.getValue()
@@ -48,7 +48,7 @@ public class Basket {
                 writer.write(price + "@");
             }
             writer.write("\n");
-            for (Map.Entry<String, Integer> entry : list.entrySet()) {
+            for (Map.Entry<String, Integer> entry : shoppingList.entrySet()) {
                 writer.write(entry.getKey() + "@" + entry.getValue() + "@");
             }
         } catch (IOException e) {
