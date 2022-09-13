@@ -1,3 +1,5 @@
+package ru.agentche.grocerybasket;
+
 import java.io.*;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -8,10 +10,14 @@ import java.util.Map;
  * Date of creation: 08.09.2022
  */
 public class Basket {
-    private final int[] prices;
-    private final String[] products;
+    private int[] prices;
+    private String[] products;
     private final Map<String, Integer> shoppingList = new HashMap<>();
     private int sumProducts;
+
+    public Basket() {
+
+    }
 
 
     Basket(int[] prices, String[] products) {
@@ -26,7 +32,6 @@ public class Basket {
         } else {
             shoppingList.put(products[productNum], amount);
         }
-        saveTxt(new File(Main.BASKET_FILE));
     }
 
     public void printCart() {
@@ -93,5 +98,17 @@ public class Basket {
             throw new RuntimeException(e);
         }
         return basket;
+    }
+
+    public int[] getPrices() {
+        return prices;
+    }
+
+    public String[] getProducts() {
+        return products;
+    }
+
+    public Map<String, Integer> getShoppingList() {
+        return shoppingList;
     }
 }
