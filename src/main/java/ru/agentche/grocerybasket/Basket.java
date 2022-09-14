@@ -26,11 +26,15 @@ public class Basket {
     }
 
     public void addToCart(int productNum, int amount) {
-        if (shoppingList.containsKey(products[productNum])) {
-            Integer counter = shoppingList.get(products[productNum]);
-            shoppingList.put(products[productNum], counter + amount);
-        } else {
-            shoppingList.put(products[productNum], amount);
+        try {
+            if (shoppingList.containsKey(products[productNum])) {
+                Integer counter = shoppingList.get(products[productNum]);
+                shoppingList.put(products[productNum], counter + amount);
+            } else {
+                shoppingList.put(products[productNum], amount);
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Товар не найден");
         }
     }
 

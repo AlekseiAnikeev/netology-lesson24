@@ -12,6 +12,9 @@ import java.util.Scanner;
  */
 public class Main {
     public static final String BASKET_FILE = "basket.json";
+    public static final String SETTINGS_FILE = "shop.xml";
+    public static File settings = new File(SETTINGS_FILE);
+    public static Config config = new Config();
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -40,10 +43,22 @@ public class Main {
             }
             clientLog.log(productNum, amount);
             basket.addToCart(productNum - 1, amount);
+            if (settings.exists()) {
+                if (config.isSaveEnables()) {
+                    if ("text".equals(config.getSaveFormat())) {
+                        basket.saveTxt(new File(config.getSaveFileName()));
+                    } else if ("json".equals(config.getSaveFormat())) {
+                        saveToJSON(basket);
+                    }
+                }
+            }
+        }
+        if (settings.exists()) {
+            if (config.isLogEnables()) {
+                clientLog.exportAsCSV(new File(config.getLogFileName()));
+            }
         }
         basket.printCart();
-        saveToJSON(basket);
-        clientLog.exportAsCSV(new File("log.csv"));
     }
 
     private static void saveToJSON(Basket basket) {
@@ -57,12 +72,27 @@ public class Main {
     }
 
     private static Basket initializationBasket(String[] products, int[] prices) {
-        File file = new File(BASKET_FILE);
+        Basket basket = new Basket(prices, products);
+        if (settings.exists()) {
+            config.readConfig();
+            if (config.isLoadEnables()) {
+                if ("text".equals(config.getLoadFormat())) {
+                    basket = Basket.loadFromTxtFile(new File(config.getLoadFileName()));
+                } else if ("json".equals(config.getLoadFormat())) {
+                    basket = loadBasketJson(products, prices, config.getLoadFileName());
+                }
+            }
+        }
+        return basket;
+    }
+
+    private static Basket loadBasketJson(String[] products, int[] prices, String fileName) {
         Basket basket;
+        File file = new File(fileName);
         if (file.exists()) {
             ObjectMapper mapper = new ObjectMapper();
             try {
-                basket = mapper.readValue(new File(BASKET_FILE), Basket.class);
+                basket = mapper.readValue(new File(fileName), Basket.class);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
