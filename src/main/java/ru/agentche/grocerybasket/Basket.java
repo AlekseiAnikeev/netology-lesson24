@@ -1,9 +1,13 @@
 package ru.agentche.grocerybasket;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.*;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+
+import static ru.agentche.grocerybasket.Main.BASKET_FILE;
 
 /**
  * @author Aleksey Anikeev aka AgentChe
@@ -102,6 +106,17 @@ public class Basket {
             throw new RuntimeException(e);
         }
         return basket;
+    }
+
+
+    public void saveToJSON(Basket basket) {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            mapper.writeValue(new File(BASKET_FILE), basket);
+        } catch (IOException e) {
+            System.out.println("Файл поврежден!");
+            throw new RuntimeException(e);
+        }
     }
 
     public int[] getPrices() {

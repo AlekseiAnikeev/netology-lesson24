@@ -48,7 +48,7 @@ public class Main {
                     if ("text".equals(config.getSaveFormat())) {
                         basket.saveTxt(new File(config.getSaveFileName()));
                     } else if ("json".equals(config.getSaveFormat())) {
-                        saveToJSON(basket);
+                        basket.saveToJSON(basket);
                     }
                 }
             }
@@ -59,16 +59,6 @@ public class Main {
             }
         }
         basket.printCart();
-    }
-
-    private static void saveToJSON(Basket basket) {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            mapper.writeValue(new File(BASKET_FILE), basket);
-        } catch (IOException e) {
-            System.out.println("Файл поврежден!");
-            throw new RuntimeException(e);
-        }
     }
 
     private static Basket initializationBasket(String[] products, int[] prices) {
